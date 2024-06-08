@@ -1,18 +1,25 @@
 const { Router } = require("express")
 const USER = require("../models/user")
-const { createTokenForUser } = require("../services/authentication")
+const { createTokenForUser } = require("../services/authentication.js")
 
 const router = Router()
 
 router.get("/signin", (req,res) => {
     return res.render("signin")
 })
-
+ 
 router.post("/signin", async (req,res) => {
     const { email, password } = req.body
-    const user = await USER.matchPassword(email, password)
-    const token = createTokenForUser(user)
-    return res.cookie("token", token).redirect("/")
+    try {
+        const user = await USER.matchPassword(email, password)
+        const token = createTokenForUser(user)
+        return res.cookie("token", token).redirect("/")
+        
+    } catch (error) {
+        return res.render("signin", {
+            error: "Incorrect email or password !!"
+        })
+    }
 })
 
 
@@ -33,6 +40,10 @@ router.post("/signup", async (req, res) => {
 
     return res.redirect("/")
     
+})
+
+router.get("/logout", (req, res) => {
+    res.clearCookie("token").redirect("/")
 })
 
 module.exports = router
