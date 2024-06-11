@@ -1,0 +1,25 @@
+<div class="container mt-3">
+    <h3>Comments (<%= comments.length %>)</h3>
+    <% if (locals.user) { %>
+        <form action="/blog/comment/<%= blog._id %>" method="post">
+            <input required name="comment" type="text" class="form-control mb-1" id="comment" aria-describedby="comment" placeholder="Enter comment">
+            <button type="submit" class="btn btn-primary btn-small ">Add</button>
+        </form>
+        <div class="mt-3 px-2">
+            <% comments.forEach(comment => { %>
+                <div class="comment ">
+                    <div>
+                        <img src=<%= comment.createdBy.profileImageUrl %> alt="" srcset="" width="40px">
+                        <h6><%= comment.createdBy.fullName %></h6>
+                    </div>
+                    <pre><%= comment.comment %></pre>
+                </div>
+            <% }) %>
+        </div>
+        
+
+       
+        
+    <% } %>
+    
+</div>
